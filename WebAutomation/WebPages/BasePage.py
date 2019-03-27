@@ -1,36 +1,29 @@
 ﻿from selenium import webdriver
+from initDriver import initDriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+import time
+
 
 class BasePage(object):
     """description of class"""
 
-    #webdriver instance
-    def __init__(self, browser='chrome'):
+    # webdriver instance
+    def __init__(self):
         '''
         initialize selenium webdriver, use chrome as default webdriver
         '''
-
-        if browser == "firefox" or browser == "ff":
-            driver = webdriver.Firefox()
-        elif browser == "chrome":
-            driver = webdriver.Chrome()
-        elif browser == "internet explorer" or browser == "ie":
-            driver = webdriver.Ie()
-        elif browser == "opera":
-            driver = webdriver.Opera()
-        elif browser == "phantomjs":
-            driver = webdriver.PhantomJS()
         try:
-            self.driver = driver
+            self.driver = initDriver.getDriver(initDriver)
         except Exception:
-            raise NameError("Not found %s browser,You can enter 'ie', 'ff' or 'chrome'." % browser)
+            initDriver.__init__(initDriver, 'chrome')
+            self.driver = initDriver.getDriver(initDriver)
 
-    def findElement(self,element):
+    def getElement(self, element):
         '''
         Find element
 
@@ -40,32 +33,32 @@ class BasePage(object):
         self.findElement(element)
         '''
         try:
-            type = element[0]
+            type = str(element[0]).lower()
             value = element[1]
-            if type == "id" or type == "ID" or type=="Id":
+            if type == "id":
                 elem = self.driver.find_element_by_id(value)
 
-            elif type == "name" or type == "NAME" or type=="Name":
+            elif type == "name":
                 elem = self.driver.find_element_by_name(value)
 
-            elif type == "class" or type == "CLASS" or type=="Class":
+            elif type == "class":
                 elem = self.driver.find_element_by_class_name(value)
 
-            elif type == "link_text" or type == "LINK_TEXT" or type=="Link_text":
+            elif type == "link_text":
                 elem = self.driver.find_element_by_link_text(value)
 
-            elif type == "xpath" or type == "XPATH" or type=="Xpath":
+            elif type == "xpath":
                 elem = self.driver.find_element_by_xpath(value)
 
-            elif type == "css" or type == "CSS" or type=="Css":
+            elif type == "css":
                 elem = self.driver.find_element_by_css_selector(value)
             else:
                 raise NameError("Please correct the type in function parameter")
         except Exception:
-            raise ValueError("No such element found"+ str(element))
+            raise ValueError("No such element found" + str(element))
         return elem
 
-    def findElements(self,element):
+    def getElementList(self, element):
         '''
         Find elements
 
@@ -75,32 +68,32 @@ class BasePage(object):
         self.findElements(element)
         '''
         try:
-            type = element[0]
+            type = str(element[0]).lower()
             value = element[1]
-            if type == "id" or type == "ID" or type=="Id":
+            if type == "id":
                 elem = self.driver.find_elements_by_id(value)
 
-            elif type == "name" or type == "NAME" or type=="Name":
+            elif type == "name":
                 elem = self.driver.find_elements_by_name(value)
 
-            elif type == "class" or type == "CLASS" or type=="Class":
+            elif type == "class":
                 elem = self.driver.find_elements_by_class_name(value)
 
-            elif type == "link_text" or type == "LINK_TEXT" or type=="Link_text":
+            elif type == "link_text":
                 elem = self.driver.find_elements_by_link_text(value)
 
-            elif type == "xpath" or type == "XPATH" or type=="Xpath":
+            elif type == "xpath":
                 elem = self.driver.find_elements_by_xpath(value)
 
-            elif type == "css" or type == "CSS" or type=="Css":
+            elif type == "css":
                 elem = self.driver.find_elements_by_css_selector(value)
             else:
                 raise NameError("Please correct the type in function parameter")
         except Exception:
-            raise ValueError("No such element found"+ str(element))
+            raise ValueError("No such element found" + str(element))
         return elem
 
-    def open(self,url):
+    def open(self, url):
         '''
         Open web url
 
@@ -109,10 +102,11 @@ class BasePage(object):
         '''
         if url != "":
             self.driver.get(url)
+            time.sleep(1)
         else:
             raise ValueError("please provide a base url")
 
-    def type(self,element,text):
+    def write(self, element, text):
         '''
         Operation input box.
 
@@ -121,8 +115,7 @@ class BasePage(object):
         '''
         element.send_keys(text)
 
-    
-    def enter(self,element):
+    def enter(self, element):
         '''
         Keyboard: hit return
 
@@ -130,21 +123,19 @@ class BasePage(object):
         self.enter(element)
         '''
         element.send_keys(Keys.RETURN)
-    
 
-    def click(self,element):
+    def click(self, element):
         '''
         Click page element, like button, image, link, etc.
         '''
         element.click()
-
+        time.sleep(1)
 
     def quit(self):
         '''
         Quit webdriver
         '''
         self.driver.quit()
-
 
     def getAttribute(self, element, attribute):
         '''
@@ -172,7 +163,7 @@ class BasePage(object):
         '''
         return self.driver.current_url
 
-    def getScreenshot(self,targetpath):
+    def getScreenshot(self, targetpath):
         '''
         Get current screenshot and save it to target path
         '''
@@ -208,6 +199,3 @@ class BasePage(object):
         '''
         self.driver.refresh()
         self.driver.switch_to()
-
-    
-        

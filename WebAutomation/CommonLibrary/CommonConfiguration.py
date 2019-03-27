@@ -1,10 +1,10 @@
 ﻿from datetime import datetime
 
 def driverPath():
-    return r'C:\Users\xua\Downloads\chromedriver_win32\chromedriver.exe'
+    return "/Usr/local/bin"
 
 def baseUrl():
-    return "https://www.google.com/"
+    return "http://10.4.79.56:8080/utf"
 
 #change time to str
 

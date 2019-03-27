@@ -15,11 +15,12 @@ class RunTests(object):
             testfiles = [test for test in f.readlines() if not test.startswith("#")]
             f.close()
             for item in testfiles:
-                subprocess.call("nosetests TestCasesRepository\\"+str(item).replace("\\n",""),shell = True)
+                subprocess.call("nosetests TestCasesRepository/"+str(item).replace("\\n",""),shell = True)
         except Exception as err:
             LogUtility.logger.debug("Failed running test cases, error message: {}".format(str(err)))
         finally:
-            EmailUtils.send_report()
+            LogUtility.logger.info("123")
+            # EmailUtils.send_report()
 
     def CreateRunFolder(self):
         try:

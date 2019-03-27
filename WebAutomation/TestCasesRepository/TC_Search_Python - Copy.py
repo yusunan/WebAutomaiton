@@ -1,6 +1,6 @@
 ﻿import unittest
 from selenium import webdriver
-from GoogleMainPage import GoogleMainPage
+from UTFHomePage import GoogleMainPage
 import CommonConfiguration as cc
 from TestCaseInfo import TestCaseInfo
 from TestReport import TestReport
